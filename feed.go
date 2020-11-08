@@ -17,27 +17,8 @@ const LIMIT = 5
 const DAYS = 24 * time.Hour
 const TIMEOUT = 1 * time.Minute
 
-type Entry struct {
-	Article   string
-	Link      string
-	Org       string
-	published *time.Time
-}
-
-type Data struct {
-	Feeds chan Entry
-}
-
-func generate(writer *bufio.Writer, provider template.TemplateProvider, data Data) {
-	tpl := provider.GetTemplate()
-	err := tpl.Execute(writer, data)
-	if err != nil {
-		panic(err)
-	}
-}
-
 var jobs chan string
-var feeds chan Entry
+var feeds chan template.Entry
 
 func setup() {
 	reader := bufio.NewReader(os.Stdin)
@@ -79,11 +60,11 @@ func worker(group *sync.WaitGroup) {
 						break
 					}
 					count++
-					feeds <- Entry{
+					feeds <- template.Entry{
 						Article:   item.Title,
 						Link:      item.Link,
 						Org:       feed.Title,
-						published: item.PublishedParsed,
+						Published: item.PublishedParsed,
 					}
 				}
 			} else {
@@ -124,11 +105,11 @@ func main() {
 	defer writer.Flush()
 
 	jobs = make(chan string)
-	feeds = make(chan Entry)
+	feeds = make(chan template.Entry)
 
 	go setup()
 	go process(WORKERS)
-	generate(writer, provider, Data{
+	template.Generate(writer, provider, template.Data{
 		Feeds: feeds,
 	})
 }

@@ -1,6 +1,10 @@
 package template
 
-import "text/template"
+import (
+	"bufio"
+	"text/template"
+	"time"
+)
 
 type TemplateProvider interface {
 	GetTemplate() *template.Template
@@ -26,4 +30,23 @@ func (p DefaultTemplateProvider) GetTemplate() *template.Template {
 		panic(err)
 	}
 	return tpl
+}
+
+type Entry struct {
+	Article   string
+	Link      string
+	Org       string
+	Published *time.Time
+}
+
+type Data struct {
+	Feeds chan Entry
+}
+
+func Generate(writer *bufio.Writer, provider TemplateProvider, data Data) {
+	tpl := provider.GetTemplate()
+	err := tpl.Execute(writer, data)
+	if err != nil {
+		panic(err)
+	}
 }
