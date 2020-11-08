@@ -2,12 +2,13 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"flag"
 	"fmt"
 	"github.com/mmcdole/gofeed"
+	"github.com/nhomble/feed-cli/template"
 	"os"
 	"sync"
-	"text/template"
 	"time"
 )
 
@@ -15,44 +16,6 @@ const WORKERS = 5
 const LIMIT = 5
 const DAYS = 24 * time.Hour
 const TIMEOUT = 1 * time.Minute
-
-type TemplateProvider interface {
-	GetTemplate() *template.Template
-}
-
-type DefaultTemplateProvider struct {
-}
-
-func (p DefaultTemplateProvider) GetTemplate() *template.Template {
-	t := `
-<!DOCTYPE html>
-<html>
-	<body>
-		<ul>{{range .Feeds}}
-			<li><a href="{{.Link}}">{{.Article}} :: {{.Org}}</a></li>
-		{{end}}</ul>
-	</body>
-</html>
-`
-	tpl := template.New("default template")
-	tpl, err := tpl.Parse(t)
-	if err != nil {
-		panic(err)
-	}
-	return tpl
-}
-
-type RemoteTemplateProvider struct {
-	override string
-}
-
-func (p RemoteTemplateProvider) GetTemplate() *template.Template {
-	tpl, err := template.ParseFiles(p.override)
-	if err != nil {
-		panic(err)
-	}
-	return tpl
-}
 
 type Entry struct {
 	Article   string
@@ -65,7 +28,7 @@ type Data struct {
 	Feeds chan Entry
 }
 
-func generate(writer *bufio.Writer, provider TemplateProvider, data Data) {
+func generate(writer *bufio.Writer, provider template.TemplateProvider, data Data) {
 	tpl := provider.GetTemplate()
 	err := tpl.Execute(writer, data)
 	if err != nil {
@@ -103,10 +66,10 @@ func process(workers int) {
 
 func worker(group *sync.WaitGroup) {
 	parser := gofeed.NewParser()
-	parser.Client.Timeout = TIMEOUT
-
+	ctx, cancel := context.WithTimeout(context.Background(), TIMEOUT)
+	defer cancel()
 	for line := range jobs {
-		feed, err := parser.ParseURL(line)
+		feed, err := parser.ParseURLWithContext(line, ctx)
 		if err == nil {
 			if feed != nil {
 				count := 0
@@ -150,11 +113,11 @@ func main() {
 	flag.StringVar(&templateOverride, "templateOverride", "", "Relative path to template override")
 	flag.Parse()
 
-	var provider TemplateProvider
+	var provider template.TemplateProvider
 	if len(templateOverride) == 0 {
-		provider = DefaultTemplateProvider{}
+		provider = template.DefaultTemplateProvider{}
 	} else {
-		provider = RemoteTemplateProvider{templateOverride}
+		provider = template.RemoteTemplateProvider{templateOverride}
 	}
 
 	writer := bufio.NewWriter(os.Stdout)
