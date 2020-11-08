@@ -64,7 +64,7 @@ type Data struct {
 	Feeds chan Entry
 }
 
-func Generate(writer *bufio.Writer, provider TemplateProvider, data Data) {
+func generate(writer *bufio.Writer, provider TemplateProvider, data Data) {
 	tpl := provider.GetTemplate()
 	err := tpl.Execute(writer, data)
 	if err != nil {
@@ -163,7 +163,7 @@ func main() {
 
 	go setup()
 	go process(WORKERS)
-	Generate(writer, provider, Data{
+	generate(writer, provider, Data{
 		Feeds: feeds,
 	})
 }
