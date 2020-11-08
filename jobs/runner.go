@@ -46,7 +46,7 @@ func worker(group *sync.WaitGroup) {
 		feed, err := parser.ParseURLWithContext(job.link, ctx)
 		if err == nil {
 			if feed != nil {
-				count := 0
+				count := 1
 				for _, item := range feed.Items {
 					t := Item(*item).getTime().Add(job.age)
 					if count > job.limit || t.Before(time.Now()) {
