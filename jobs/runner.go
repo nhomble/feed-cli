@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-const WORKERS = 5
-
 var jobs chan Job
 var feeds chan template.Entry
 
@@ -84,12 +82,12 @@ func (i Item) getTime() time.Time {
 	return time.Now()
 }
 
-func Work(reader *bufio.Reader) chan template.Entry {
+func Work(reader *bufio.Reader, workers int) chan template.Entry {
 	jobs = make(chan Job)
 	feeds = make(chan template.Entry)
 
 	go setup(reader)
-	go process(WORKERS)
+	go process(workers)
 
 	return feeds
 }
