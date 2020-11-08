@@ -8,6 +8,7 @@ import (
 	"github.com/mmcdole/gofeed"
 	"github.com/nhomble/feed-cli/template"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -17,7 +18,17 @@ const LIMIT = 5
 const DAYS = 24 * time.Hour
 const TIMEOUT = 1 * time.Minute
 
-var jobs chan string
+type Job struct {
+	link string
+}
+
+func createJob(bytes []byte) Job {
+	line := string(bytes)
+	s := strings.TrimSpace(line)
+	return Job{s}
+}
+
+var jobs chan Job
 var feeds chan template.Entry
 
 func setup() {
@@ -28,7 +39,7 @@ func setup() {
 			break
 		}
 		if len(line) > 0 {
-			jobs <- string(line)
+			jobs <- createJob(line)
 		}
 	}
 	close(jobs)
@@ -49,8 +60,8 @@ func worker(group *sync.WaitGroup) {
 	parser := gofeed.NewParser()
 	ctx, cancel := context.WithTimeout(context.Background(), TIMEOUT)
 	defer cancel()
-	for line := range jobs {
-		feed, err := parser.ParseURLWithContext(line, ctx)
+	for job := range jobs {
+		feed, err := parser.ParseURLWithContext(job.link, ctx)
 		if err == nil {
 			if feed != nil {
 				count := 0
@@ -68,10 +79,10 @@ func worker(group *sync.WaitGroup) {
 					}
 				}
 			} else {
-				fmt.Errorf("Did not parse a feed from line='%s'\n", line)
+				fmt.Errorf("Did not parse a feed from line='%s'\n", job.link)
 			}
 		} else {
-			fmt.Errorf("Failed to process='%s' err='%v'\n", line, err)
+			fmt.Errorf("Failed to process='%s' err='%v'\n", job.link, err)
 		}
 	}
 	group.Done()
@@ -98,13 +109,13 @@ func main() {
 	if len(templateOverride) == 0 {
 		provider = template.DefaultTemplateProvider{}
 	} else {
-		provider = template.RemoteTemplateProvider{templateOverride}
+		provider = template.RemoteTemplateProvider{Override: templateOverride}
 	}
 
 	writer := bufio.NewWriter(os.Stdout)
 	defer writer.Flush()
 
-	jobs = make(chan string)
+	jobs = make(chan Job)
 	feeds = make(chan template.Entry)
 
 	go setup()
