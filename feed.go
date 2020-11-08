@@ -14,6 +14,7 @@ import (
 const WORKERS = 5
 const LIMIT = 5
 const DAYS = 24 * time.Hour
+const TIMEOUT = 1 * time.Minute
 
 type TemplateProvider interface {
 	GetTemplate() *template.Template
@@ -102,6 +103,7 @@ func process(workers int) {
 
 func worker(group *sync.WaitGroup) {
 	parser := gofeed.NewParser()
+	parser.Client.Timeout = TIMEOUT
 
 	for line := range jobs {
 		feed, err := parser.ParseURL(line)
