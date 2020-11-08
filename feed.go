@@ -6,6 +6,7 @@ import (
 	"github.com/mmcdole/gofeed"
 	"os"
 	"sync"
+	"text/template"
 	"time"
 )
 
@@ -13,15 +14,42 @@ const WORKERS = 5
 const LIMIT = 5
 const DAYS = 24 * time.Hour
 
-var jobs chan string
-var feeds chan entry
+const defaultTemplate = `
+<html>
+	<body>
+		<ul>{{range .Feeds}}
+			<li><a href="{{.Link}}">{{.Article}} :: {{.Org}}</a></li>
+		{{end}}</ul>
+	</body>
+</html>
+`
 
-type entry struct {
-	article   string
-	link      string
-	org       string
+type Entry struct {
+	Article   string
+	Link      string
+	Org       string
 	published *time.Time
 }
+
+type Data struct {
+	Feeds chan Entry
+}
+
+func Generate(writer *bufio.Writer, data Data) {
+	tpl := template.New("feed template")
+	tpl, err := tpl.Parse(defaultTemplate)
+	if err != nil {
+		panic(err)
+	}
+
+	err = tpl.Execute(writer, data)
+	if err != nil {
+		panic(err)
+	}
+}
+
+var jobs chan string
+var feeds chan Entry
 
 func setup() {
 	reader := bufio.NewReader(os.Stdin)
@@ -62,10 +90,10 @@ func worker(group *sync.WaitGroup) {
 						break
 					}
 					count++
-					feeds <- entry{
-						article:   item.Title,
-						link:      item.Link,
-						org:       feed.Title,
+					feeds <- Entry{
+						Article:   item.Title,
+						Link:      item.Link,
+						Org:       feed.Title,
 						published: item.PublishedParsed,
 					}
 				}
@@ -91,28 +119,16 @@ func (i Item) getTime() time.Time {
 	return time.Now()
 }
 
-func write(writer *bufio.Writer) {
-	for entry := range feeds {
-		writer.WriteString(fmt.Sprintf("<li><a href=\"%s\">%s :: %s</a></li>\n", entry.link, entry.article, entry.org))
-	}
-}
-
 func main() {
 	writer := bufio.NewWriter(os.Stdout)
 	defer writer.Flush()
 
 	jobs = make(chan string)
-	feeds = make(chan entry)
-
-	writer.WriteString("<html>\n")
-	writer.WriteString("<body>\n")
-	writer.WriteString("<ul>\n")
+	feeds = make(chan Entry)
 
 	go setup()
 	go process(WORKERS)
-	write(writer)
-
-	writer.WriteString("</ul>\n")
-	writer.WriteString("</body>\n")
-	writer.WriteString("</html>")
+	Generate(writer, Data{
+		Feeds: feeds,
+	})
 }
