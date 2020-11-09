@@ -1,5 +1,7 @@
 feed-cli
 ===
+![CI](https://github.com/nhomble/feed-cli/workflows/CI/badge.svg)
+
 simple utility for formatting (groups of) feeds
 
 # Usage
