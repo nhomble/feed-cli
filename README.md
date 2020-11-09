@@ -14,11 +14,13 @@ The goal has been to keep the feed file simple. At a minimum, you can just provi
 a list of feeds delimited by new-lines and you are done. To naturally give some more metadata per feed, the
 cli recognizes the following format
 
-Given the feed file is simply
+Given a feed file formatted like:
 ```text
 [feed]
 [feed]
 ```
+
+Then the grammar looks like:
 
 ```text
 feed        := [feedLink] [metadata]
@@ -27,6 +29,16 @@ metadata    := [key]=[value] [metadata]
 key         := string
 value       := string
 ```
+
+#### For example
+[My feeds](https://github.com/nhomble/fdmi/blob/master/feeds)
+```text
+https://nullprogram.com/feed/ daysOld=30
+http://xkcd.com/atom.xml
+https://blog.codinghorror.com/rss/
+```
+
+### Feed metadata
 
 |Key|Description|
 |---|-----------|
