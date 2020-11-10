@@ -11,7 +11,7 @@ import (
 )
 
 var jobs chan Job
-var feeds chan template.Entry
+var feeds chan template.Feed
 
 func setup(reader *bufio.Reader) {
 	for {
@@ -47,18 +47,24 @@ func worker(group *sync.WaitGroup) {
 		if err == nil {
 			if feed != nil {
 				count := 1
+				group := template.Feed{
+					Org:     feed.Title,
+					Entries: []template.Entry{},
+				}
 				for _, item := range feed.Items {
 					t := Item(*item).getTime().Add(job.age)
 					if count > job.limit || t.Before(time.Now()) {
 						break
 					}
 					count++
-					feeds <- template.Entry{
+					group.Entries = append(group.Entries, template.Entry{
 						Article:   item.Title,
 						Link:      item.Link,
-						Org:       feed.Title,
 						Published: item.PublishedParsed,
-					}
+					})
+				}
+				if len(group.Entries) > 0 {
+					feeds <- group
 				}
 			} else {
 				fmt.Errorf("Did not parse a feed from line='%s'\n", job.link)
@@ -82,14 +88,14 @@ func (i Item) getTime() time.Time {
 	return time.Now()
 }
 
-func Work(reader *bufio.Reader, workers int) []template.Entry {
+func Work(reader *bufio.Reader, workers int) []template.Feed {
 	jobs = make(chan Job)
-	feeds = make(chan template.Entry)
+	feeds = make(chan template.Feed)
 
 	go setup(reader)
 	go process(workers)
 
-	ret := []template.Entry{}
+	ret := []template.Feed{}
 	for val := range feeds {
 		ret = append(ret, val)
 	}

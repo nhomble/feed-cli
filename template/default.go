@@ -18,9 +18,14 @@ func (p DefaultTemplateProvider) GetTemplate() *template.Template {
 <!DOCTYPE html>
 <html>
 	<body>
-		<ul>{{range .Feeds}}
-			<li><a href="{{.Link}}">{{.Article}} :: {{.Org}}</a></li>
-		{{end}}</ul>
+		{{range .Feeds}}
+		<h1>{{.Org}}</h1>
+		<ul>
+			{{range .Entries}}
+			<li><a href="{{.Link}}">{{.Article}}</a></li>
+			{{end}}
+		</ul>
+		{{end}}
 	</body>
 </html>
 `
@@ -32,15 +37,20 @@ func (p DefaultTemplateProvider) GetTemplate() *template.Template {
 	return tpl
 }
 
+type Feed struct {
+	Org     string
+	Entries []Entry
+}
+
 type Entry struct {
+	Parent    Feed
 	Article   string
 	Link      string
-	Org       string
 	Published *time.Time
 }
 
 type Data struct {
-	Feeds []Entry
+	Feeds []Feed
 }
 
 func Generate(writer *bufio.Writer, provider Provider, data Data) {
