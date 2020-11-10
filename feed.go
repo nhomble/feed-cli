@@ -19,7 +19,7 @@ func main() {
 		panic("Need to have a positive number of workers!")
 	}
 
-	var provider template.TemplateProvider
+	var provider template.Provider
 	if len(templateOverride) == 0 {
 		provider = template.DefaultTemplateProvider{}
 	} else {

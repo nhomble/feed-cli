@@ -82,12 +82,16 @@ func (i Item) getTime() time.Time {
 	return time.Now()
 }
 
-func Work(reader *bufio.Reader, workers int) chan template.Entry {
+func Work(reader *bufio.Reader, workers int) []template.Entry {
 	jobs = make(chan Job)
 	feeds = make(chan template.Entry)
 
 	go setup(reader)
 	go process(workers)
 
-	return feeds
+	ret := []template.Entry{}
+	for val := range feeds {
+		ret = append(ret, val)
+	}
+	return ret
 }

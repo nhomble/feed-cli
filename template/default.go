@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type TemplateProvider interface {
+type Provider interface {
 	GetTemplate() *template.Template
 }
 
@@ -40,10 +40,10 @@ type Entry struct {
 }
 
 type Data struct {
-	Feeds chan Entry
+	Feeds []Entry
 }
 
-func Generate(writer *bufio.Writer, provider TemplateProvider, data Data) {
+func Generate(writer *bufio.Writer, provider Provider, data Data) {
 	tpl := provider.GetTemplate()
 	err := tpl.Execute(writer, data)
 	if err != nil {

@@ -34,3 +34,5 @@ jobs:
 
     - name: Test Jobs
       run: go test -v ./jobs
+    - name: Test Template
+      run: go test -v ./template
