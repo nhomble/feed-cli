@@ -6,6 +6,7 @@ import (
 	"github.com/nhomble/feed-cli/jobs"
 	"github.com/nhomble/feed-cli/template"
 	"os"
+	"time"
 )
 
 func main() {
@@ -33,5 +34,6 @@ func main() {
 
 	template.Generate(writer, provider, template.Data{
 		Feeds: feeds,
+		Now:   time.Now(),
 	})
 }

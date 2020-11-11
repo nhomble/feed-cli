@@ -12,6 +12,7 @@ func TestDefaultTemplate(t *testing.T) {
 	writer := bufio.NewWriter(&buf)
 	now := time.Now()
 	Generate(writer, DefaultTemplateProvider{}, Data{
+		Now: time.Time{},
 		Feeds: []Feed{
 			{
 				Org: "someOrg",
@@ -27,7 +28,7 @@ func TestDefaultTemplate(t *testing.T) {
 	})
 	writer.Flush()
 	out := buf.String()
-	expected := "\n<!DOCTYPE html>\n<html>\n\t<body>\n\t\t\n\t\t<h1>someOrg</h1>\n\t\t<ul>\n\t\t\t\n\t\t\t<li><a href=\"someLink\">someArticle</a></li>\n\t\t\t\n\t\t</ul>\n\t\t\n\t</body>\n</html>\n"
+	expected := "\n<!DOCTYPE html>\n<html>\n\t<body>\n\t\t<h1>0001-01-01 00:00:00 +0000 UTC</h1>\n\t\t\n\t\t<h1>someOrg</h1>\n\t\t<ul>\n\t\t\t\n\t\t\t<li><a href=\"someLink\">someArticle</a></li>\n\t\t\t\n\t\t</ul>\n\t\t\n\t</body>\n</html>\n"
 	if expected != out {
 		t.Fatalf("%s\n", out)
 	}

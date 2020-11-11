@@ -18,6 +18,7 @@ func (p DefaultTemplateProvider) GetTemplate() *template.Template {
 <!DOCTYPE html>
 <html>
 	<body>
+		<h1>{{with .Now}}{{.String}}{{end}}</h1>
 		{{range .Feeds}}
 		<h1>{{.Org}}</h1>
 		<ul>
@@ -51,6 +52,7 @@ type Entry struct {
 
 type Data struct {
 	Feeds []Feed
+	Now   time.Time
 }
 
 func Generate(writer *bufio.Writer, provider Provider, data Data) {
