@@ -36,15 +36,10 @@ The goal has been to keep the feed file simple. At a minimum, you can just provi
 a list of feeds delimited by new-lines and you are done. To naturally give some more metadata per feed, the
 cli recognizes the following format
 
-Given a feed file formatted like:
-```text
-<feed>
-<feed>
-```
-
 Then the grammar looks like:
 
 ```text
+<feedFile>    ::= <feed> || <feed>\n
 <feed>        ::= <feedLink> <metadata>
 <feedLink>    ::= <url>
 <metadata>    ::= <key>=<value> <metadata> | ""
