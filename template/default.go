@@ -55,6 +55,11 @@ type Data struct {
 	Now   time.Time
 }
 
+func (d Data) NowIn(s string) time.Time {
+	l, _ := time.LoadLocation(s)
+	return d.Now.In(l)
+}
+
 func Generate(writer *bufio.Writer, provider Provider, data Data) {
 	tpl := provider.GetTemplate()
 	err := tpl.Execute(writer, data)

@@ -33,3 +33,14 @@ func TestDefaultTemplate(t *testing.T) {
 		t.Fatalf("%s\n", out)
 	}
 }
+
+func TestData_NowIn(t *testing.T) {
+	utc, _ := time.LoadLocation("UTC")
+	d := Data{
+		Now: time.Date(2000, 1, 1, 1, 0, 0, 0, utc),
+	}
+	out := d.NowIn("EST")
+	if "1999-12-31 20:00:00 -0500 EST" != out.String() {
+		t.Fatalf("%s\n", out.String())
+	}
+}
