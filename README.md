@@ -38,18 +38,18 @@ cli recognizes the following format
 
 Given a feed file formatted like:
 ```text
-[feed]
-[feed]
+<feed>
+<feed>
 ```
 
 Then the grammar looks like:
 
 ```text
-feed        := [feedLink] [metadata]
-feedLink    := string
-metadata    := [key]=[value] [metadata]
-key         := string
-value       := string
+<feed>        ::= <feedLink> <metadata>
+<feedLink>    ::= <url>
+<metadata>    ::= <key>=<value> <metadata> | ""
+<key>         ::= <string>
+<value>       ::= <string>
 ```
 
 #### For example
