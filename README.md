@@ -9,6 +9,28 @@ simple utility for formatting (groups of) feeds
 $ echo "https://your.feed.com/feed" > go run feed.go
 ```
 
+## Template Data
+You can supply your own golang template with the ```-templateOverride``` parameter. When defining your own template, there
+are several template variables at your disposal:
+
+|Field          |Description|
+|-----          |-----------|
+|.Now           |Get current time (machine dependent)|
+|.NowIn (loc)   |Get current time in desired location|
+|.Org           |The organization / blog name / title|
+|.Feeds         |An array of entries you can perform a range over|
+
+Within a feed object you have
+
+|Field          |Description|
+|----           |-----------|
+|.Parent        |A reference back to the feed group |
+|.Article       |Article name, title of the post |
+|.Link          |URL to the source|
+|.Published     |last touched time, latest time between published and updated time|
+
+[for example](https://github.com/nhomble/fdmi/blob/master/index.tpl)
+
 ## Feed metadata
 The goal has been to keep the feed file simple. At a minimum, you can just provide
 a list of feeds delimited by new-lines and you are done. To naturally give some more metadata per feed, the
@@ -38,7 +60,7 @@ http://xkcd.com/atom.xml
 https://blog.codinghorror.com/rss/
 ```
 
-### Feed metadata
+### Feed metadata fields
 
 |Key|Description|
 |---|-----------|
