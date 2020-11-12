@@ -66,7 +66,7 @@ func createJob(bytes []byte) Job {
 			if err != nil {
 				panic(err)
 			} else if age < 1 {
-				panic("Must provde a positive limit")
+				panic("Must provide a positive limit")
 			}
 			job.age = time.Duration(age*24) * time.Hour
 		}
