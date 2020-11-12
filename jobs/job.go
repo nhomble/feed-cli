@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 const DAYS = 24 * time.Hour
@@ -13,6 +14,28 @@ type Job struct {
 	limit   int
 	age     time.Duration
 	timeout time.Duration
+}
+
+func isWhiteSpace(s string) bool {
+	for _, c := range s {
+		if !unicode.IsSpace(c) {
+			return false
+		}
+	}
+	return true
+}
+
+func canProcess(bytes []byte) bool {
+	if len(bytes) < 1 {
+		return false
+	}
+	s := strings.TrimSpace(string(bytes))
+	if strings.HasPrefix(s, "#") {
+		return false
+	} else if isWhiteSpace(s) {
+		return false
+	}
+	return true
 }
 
 func createJob(bytes []byte) Job {

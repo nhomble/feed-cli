@@ -34,3 +34,27 @@ func TestParseDaysOld(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestCanProcess_Something(t *testing.T) {
+	if !canProcess([]byte("https://my.feed/feed")) {
+		t.Fail()
+	}
+}
+
+func TestCanProcess_Comment(t *testing.T) {
+	if canProcess([]byte("  # some comment")) {
+		t.Fail()
+	}
+}
+
+func TestCanProcess_Empty(t *testing.T) {
+	if canProcess([]byte{}) {
+		t.Fail()
+	}
+}
+
+func TestCanProcess_Whitespace(t *testing.T) {
+	if canProcess([]byte("    ")) {
+		t.Fail()
+	}
+}

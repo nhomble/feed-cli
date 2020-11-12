@@ -39,7 +39,9 @@ cli recognizes the following format
 Then the grammar looks like:
 
 ```text
-<feedFile>    ::= <feed> || <feed>\n
+<feedFile>    ::= <line> || <line>\n
+<line>        ::= <feed> || <comment>> || ""
+<comment>     ::= # <string>
 <feed>        ::= <feedLink> <metadata>
 <feedLink>    ::= <url>
 <metadata>    ::= <key>=<value> <metadata> | ""

@@ -19,7 +19,7 @@ func setup(reader *bufio.Reader) {
 		if line == nil || err != nil {
 			break
 		}
-		if len(line) > 0 {
+		if canProcess(line) {
 			jobs <- createJob(line)
 		}
 	}
