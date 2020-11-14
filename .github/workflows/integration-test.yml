@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: debug
+      run: ls
+    - name: debug again
+      run: pwd
     - name: Build the RSS image
       run: docker build ./integration-test/local-rss/. --file ./integration-test/local-rss/Dockerfile --tag 0.1.0:v0.1.0
     - name: Run RSS Server
