@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+docker run feed-cli-test:0.1.0 &
+
 echo "http://localhost:8000/rss.xml" | go run feed.go >out.html
 tail -n10 out.html >diff1
 tail -n10 integration-test/local-rss/output.html >diff2
