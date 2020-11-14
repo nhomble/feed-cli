@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: debug
-      run: ls integration-test/local-rss
+      run: ls integration-test
     - name: debug again
       run: pwd
     - name: Build the RSS image
