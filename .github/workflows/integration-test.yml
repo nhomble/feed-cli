@@ -14,13 +14,7 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: debug
-      run: ls integration-test
-    - name: debug again
-      run: pwd
-    - name: Build the RSS image
+    - name: Build the test image
       run: docker build --file ./integration-test/local-rss/Dockerfile --tag feed-cli-test:0.1.0 ./integration-test/local-rss/.
-    - name: Run RSS Server
-      run: docker run feed-cli-test:0.1.0
     - name: Run Test
       run: sh integration-test/local-rss/test.sh
