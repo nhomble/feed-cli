@@ -19,7 +19,7 @@ jobs:
     - name: debug again
       run: pwd
     - name: Build the RSS image
-      run: docker build --file ./integration-test/local-rss/Dockerfile --tag 0.1.0:v0.1.0 ./integration-test/local-rss/.
+      run: docker build --file ./integration-test/local-rss/Dockerfile --tag feed-cli-test:v0.1.0 ./integration-test/local-rss/.
     - name: Run RSS Server
       run: docker run feed-cli-test:0.1.0
     - name: Run Test
