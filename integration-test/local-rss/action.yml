@@ -1,0 +1,6 @@
+# action.yml
+name: 'feed-cli integration test'
+description: 'run local rss feed for testing'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
