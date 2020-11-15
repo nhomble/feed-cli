@@ -2,7 +2,10 @@
 
 image:https://github.com/nhomble/feed-cli/workflows/CI/badge.svg[CI] image:https://github.com/nhomble/feed-cli/workflows/Integration%20test/badge.svg[Integration test]
 
+[.lead]
 simple utility for formatting (groups of) feeds
+
+:toc:
 
 == Usage
 
