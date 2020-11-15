@@ -1,3 +1,5 @@
+:toc: macro
+
 = feed-cli
 
 image:https://github.com/nhomble/feed-cli/workflows/CI/badge.svg[CI] image:https://github.com/nhomble/feed-cli/workflows/Integration%20test/badge.svg[Integration test]
@@ -5,7 +7,7 @@ image:https://github.com/nhomble/feed-cli/workflows/CI/badge.svg[CI] image:https
 [.lead]
 simple utility for formatting (groups of) feeds
 
-:toc:
+toc::[]
 
 == Usage
 
@@ -16,8 +18,8 @@ $ echo "https://your.feed.com/feed" > go run feed.go
 
 == Template Data
 
-You can supply your own golang template with the `-templateOverride` parameter. When defining your own template, there
-are several template variables at your disposal:
+You can supply your own golang template with the `-templateOverride` parameter.
+When defining your own template, there are several template variables at your disposal:
 
 |===
 |Field |Description
@@ -33,8 +35,8 @@ Within a feed object you have
 |===
 |Field |Description
 
-|.Parent |A reference back to the feed group 
-|.Article |Article name, title of the post 
+|.Parent |A reference back to the feed group
+|.Article |Article name, title of the post
 |.Link |URL to the source
 |.Published |last touched time, latest time between published and updated time
 |===
@@ -43,9 +45,9 @@ https://github.com/nhomble/fdmi/blob/master/index.tpl[for example]
 
 == Feed metadata
 
-The goal has been to keep the feed file simple. At a minimum, you can just provide
-a list of feeds delimited by new-lines and you are done. To naturally give some more metadata per feed, the
-cli recognizes the following format
+The goal has been to keep the feed file simple.
+At a minimum, you can just provide a list of feeds delimited by new-lines and you are done.
+To naturally give some more metadata per feed, the cli recognizes the following format
 
 Then the grammar looks like:
 
@@ -81,7 +83,7 @@ https://blog.codinghorror.com/rss/
 |limit |positive number to indicate a limit to the number of entries to pull for a feed
 |===
 
-== Options
+== CLI Options
 
 [source,text]
 ----
