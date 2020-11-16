@@ -1,5 +1,12 @@
 #!/usr/bin/env sh
 
+clean() {
+  docker kill test
+  rm -f diff1
+  rm -f diff2
+  rm -f out.html
+}
+
 docker run -p 8000:8000 --name test -d feed-cli-test:0.1.0
 
 ENDPOINT="http://localhost:8000/rss.xml"
@@ -19,8 +26,8 @@ DIFF=$(diff diff1 diff2)
 if [ "$DIFF" != "" ]; then
   echo "THERE WAS A DIFF!"
   echo $DIFF
-  docker kill test
+  clean
   exit 1
+else
+  clean
 fi
-
-docker kill test
