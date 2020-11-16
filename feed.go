@@ -9,28 +9,29 @@ import (
 	"time"
 )
 
+var (
+	workers          = flag.Int("numWorkers", 5, "Number of worker threads")
+	templateOverride = flag.String("templateOverride", "", "Relative path to template override")
+)
+
 func main() {
-	var templateOverride string
-	var workers int
-	flag.StringVar(&templateOverride, "templateOverride", "", "Relative path to template override")
-	flag.IntVar(&workers, "numWorkers", 5, "Number of worker threads")
 	flag.Parse()
 
-	if workers < 1 {
+	if *workers < 1 {
 		panic("Need to have a positive number of workers!")
 	}
 
 	var provider template.Provider
-	if len(templateOverride) == 0 {
+	if len(*templateOverride) == 0 {
 		provider = template.DefaultTemplateProvider{}
 	} else {
-		provider = template.RemoteTemplateProvider{Override: templateOverride}
+		provider = template.RemoteTemplateProvider{Override: *templateOverride}
 	}
 
 	writer := bufio.NewWriter(os.Stdout)
 	defer writer.Flush()
 
-	feeds := jobs.Work(bufio.NewReader(os.Stdin), workers)
+	feeds := jobs.Work(bufio.NewReader(os.Stdin), *workers)
 
 	template.Generate(writer, provider, template.Data{
 		Feeds: feeds,
