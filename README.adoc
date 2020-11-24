@@ -13,7 +13,7 @@ toc::[]
 
 [source,bash]
 ----
-$ echo "https://your.feed.com/feed" > go run feed.go
+$ echo "https://your.feed.com/feed" | go run feed.go
 ----
 
 == Template Data
