@@ -58,7 +58,7 @@ Then the grammar looks like:
 <comment>     ::= # <string>
 <feed>        ::= <feedLink> <metadata>
 <feedLink>    ::= <url>
-<metadata>    ::= <key>=<value> <metadata> | ""
+<metadata>    ::= <key>=<value> <metadata> || ""
 <key>         ::= <string>
 <value>       ::= <string>
 ----
