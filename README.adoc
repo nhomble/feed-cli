@@ -70,7 +70,7 @@ https://github.com/nhomble/fdmi/blob/master/feeds[My feeds]
 [source,text]
 ----
 https://nullprogram.com/feed/ daysOld=30
-http://xkcd.com/atom.xml
+https://xkcd.com/atom.xml
 https://blog.codinghorror.com/rss/
 ----
 
