@@ -12,6 +12,7 @@ var defaultParser = goFeedParser{
 	gofeed.NewParser(),
 }
 
+// responsible for parsing a feed, we are abstracting gofeed to allow for custom extensions
 type FeedParser interface {
 	parse(Job) []template.Feed
 }
@@ -25,7 +26,7 @@ func (parser goFeedParser) parse(job Job) []template.Feed {
 	defer cancel()
 	feed, err := parser.parser.ParseURLWithContext(job.link, ctx)
 	if err != nil {
-		fmt.Errorf("Failed to process='%s' err='%v'\n", job.link, err)
+		fmt.Errorf("failed to process='%s' err='%v'", job.link, err)
 		return []template.Feed{}
 	}
 	return transform(job, feed)
@@ -35,9 +36,9 @@ func parserForJob(job Job) FeedParser {
 	return defaultParser
 }
 
-type Item gofeed.Item
+type feedItem gofeed.Item
 
-func (i Item) getTime() time.Time {
+func (i feedItem) getTime() time.Time {
 	if i.UpdatedParsed != nil {
 		return *i.UpdatedParsed
 	}
@@ -56,7 +57,7 @@ func transform(job Job, feed *gofeed.Feed) []template.Feed {
 			Entries: []template.Entry{},
 		}
 		for _, item := range feed.Items {
-			t := Item(*item).getTime().Add(job.age)
+			t := feedItem(*item).getTime().Add(job.age)
 			if count > job.limit || t.Before(time.Now()) {
 				break
 			}
