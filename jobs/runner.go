@@ -2,12 +2,8 @@ package jobs
 
 import (
 	"bufio"
-	"context"
-	"fmt"
-	"github.com/mmcdole/gofeed"
 	"github.com/nhomble/feed-cli/template"
 	"sync"
-	"time"
 )
 
 var jobs chan Job
@@ -38,54 +34,13 @@ func process(workers int) {
 }
 
 func worker(group *sync.WaitGroup) {
-	parser := gofeed.NewParser()
 
 	for job := range jobs {
-		ctx, cancel := context.WithTimeout(context.Background(), job.timeout)
-		defer cancel()
-		feed, err := parser.ParseURLWithContext(job.link, ctx)
-		if err == nil {
-			if feed != nil {
-				count := 1
-				group := template.Feed{
-					Org:     feed.Title,
-					Entries: []template.Entry{},
-				}
-				for _, item := range feed.Items {
-					t := Item(*item).getTime().Add(job.age)
-					if count > job.limit || t.Before(time.Now()) {
-						break
-					}
-					count++
-					group.Entries = append(group.Entries, template.Entry{
-						Article:   item.Title,
-						Link:      item.Link,
-						Published: item.PublishedParsed,
-					})
-				}
-				if len(group.Entries) > 0 {
-					feeds <- group
-				}
-			} else {
-				fmt.Errorf("Did not parse a feed from line='%s'\n", job.link)
-			}
-		} else {
-			fmt.Errorf("Failed to process='%s' err='%v'\n", job.link, err)
+		for _, group := range parserForJob(job).parse(job) {
+			feeds <- group
 		}
 	}
 	group.Done()
-}
-
-type Item gofeed.Item
-
-func (i Item) getTime() time.Time {
-	if i.UpdatedParsed != nil {
-		return *i.UpdatedParsed
-	}
-	if i.PublishedParsed != nil {
-		return *i.PublishedParsed
-	}
-	return time.Now()
 }
 
 func Work(reader *bufio.Reader, workers int) []template.Feed {
