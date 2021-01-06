@@ -12,7 +12,8 @@ var defaultParser = goFeedParser{
 	gofeed.NewParser(),
 }
 
-// responsible for parsing a feed, we are abstracting gofeed to allow for custom extensions
+// FeedParser is responsible for parsing a feed,
+// we are abstracting gofeed to allow for custom extensions
 type FeedParser interface {
 	parse(Job) []template.Feed
 }
