@@ -2,7 +2,7 @@
 
 = feed-cli
 
-image:https://github.com/nhomble/feed-cli/workflows/CI/badge.svg[CI] image:https://github.com/nhomble/feed-cli/workflows/Integration%20test/badge.svg[Integration test]
+image:https://github.com/nhomble/feed-cli/workflows/CI/badge.svg[CI] image:https://github.com/nhomble/feed-cli/workflows/Integration%20test/badge.svg[Integration test] image:https://github.com/nhomble/feed-cli/workflows/Linter/badge.svg[Linter]
 
 [.lead]
 simple utility for formatting (groups of) feeds
