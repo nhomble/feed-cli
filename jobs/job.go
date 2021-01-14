@@ -69,8 +69,16 @@ func createJob(bytes []byte) Job {
 				panic("Must provide a positive limit")
 			}
 			job.age = time.Duration(age*24) * time.Hour
+		} else if strings.HasPrefix(tokens[i], "timeout=") {
+			v := strings.TrimPrefix(tokens[i], "timeout=")
+			timeout, err := strconv.ParseInt(v, 10, 64)
+			if err != nil {
+				panic(err)
+			} else if timeout < 1 {
+				panic("Must provide a positive limit")
+			}
+			job.timeout = time.Duration(timeout) * time.Second
 		}
 	}
-
 	return job
 }
