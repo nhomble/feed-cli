@@ -58,3 +58,10 @@ func TestCanProcess_Whitespace(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestParseTimeout(t *testing.T) {
+	job := createJob([]byte(url + "   timeout=100"))
+	if job.timeout != time.Duration(100)*time.Second {
+		t.Fail()
+	}
+}
