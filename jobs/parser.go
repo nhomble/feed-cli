@@ -34,6 +34,9 @@ func (parser goFeedParser) parse(job Job) []template.Feed {
 }
 
 func parserForJob(job Job) FeedParser {
+	if job.isTwitter() {
+		return createTwitterParser()
+	}
 	return defaultParser
 }
 
