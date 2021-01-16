@@ -63,7 +63,17 @@ Then the grammar looks like:
 <value>       ::= <string>
 ----
 
-==== For example
+=== Feed Schemes
+By default, urls passed as `feedLinks` are interpreted as typical xml feed (rss, atom).
+|===
+| Scheme                | Feature                   | Additional Configuration
+
+| (default) http://     | parse rss/atom feed       | none
+| twitter://<handle>    | parse twitter timeline    | define environment variables: TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
+|===
+
+
+=== For example
 
 https://github.com/nhomble/fdmi/blob/master/feeds[My feeds]
 
@@ -72,6 +82,7 @@ https://github.com/nhomble/fdmi/blob/master/feeds[My feeds]
 https://nullprogram.com/feed/ daysOld=30
 https://xkcd.com/atom.xml
 https://blog.codinghorror.com/rss/
+twitter://@dev_humor
 ----
 
 === Feed metadata fields
