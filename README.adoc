@@ -102,7 +102,7 @@ twitter://@dev_humor
 ----
 -templateOverride [relative path to go template]
     // point to your own go templates for formatting
-    $ go run feed.go -templateOverride ./index.tpl 
+    $ go run feed.go -templateOverride ./index.tpl
 
 -numWorkers [natural number]
     // control the amount of parallelism in fetching feeds
