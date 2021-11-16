@@ -90,9 +90,10 @@ twitter://@dev_humor
 |===
 |Key |Description
 
-| daysOld   | positive number to indicate number of days old to respect this feed
-| limit     | positive number to indicate a limit to the number of entries to pull for a feed
-| timeout   | positive number to indicate number of seconds to use as timeout to fetch a feed
+| daysOld       | positive number to indicate number of days old to respect this feed
+| limit         | positive number to indicate a limit to the number of entries to pull for a feed
+| timeout       | positive number to indicate number of seconds to use as timeout to fetch a feed
+| nameOverride  | string to override the blog title variable in the template data
 |===
 
 == CLI Options

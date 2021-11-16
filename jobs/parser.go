@@ -60,17 +60,21 @@ func transform(job Job, feed *gofeed.Feed) []template.Feed {
 			Org:     feed.Title,
 			Entries: []template.Entry{},
 		}
+		if len(job.nameOverride) > 0 {
+			group.Org = job.nameOverride
+		}
 		for _, item := range feed.Items {
 			t := feedItem(*item).getTime().Add(job.age)
 			if count > job.limit || t.Before(time.Now()) {
 				break
 			}
 			count++
-			group.Entries = append(group.Entries, template.Entry{
+			e := template.Entry{
 				Article:   item.Title,
 				Link:      item.Link,
 				Published: item.PublishedParsed,
-			})
+			}
+			group.Entries = append(group.Entries, e)
 		}
 		if len(group.Entries) > 0 {
 			ret = append(ret, group)
