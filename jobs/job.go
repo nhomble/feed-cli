@@ -10,10 +10,11 @@ import (
 const DAYS = 24 * time.Hour
 
 type Job struct {
-	link    string
-	limit   int
-	age     time.Duration
-	timeout time.Duration
+	link         string
+	limit        int
+	age          time.Duration
+	timeout      time.Duration
+	nameOverride string
 }
 
 func isWhiteSpace(s string) bool {
@@ -78,6 +79,9 @@ func createJob(bytes []byte) Job {
 				panic("Must provide a positive limit")
 			}
 			job.timeout = time.Duration(timeout) * time.Second
+		} else if strings.HasPrefix(tokens[i], "nameOverride=") {
+			v := strings.TrimPrefix(tokens[i], "nameOverride=")
+			job.nameOverride = v
 		}
 	}
 	return job

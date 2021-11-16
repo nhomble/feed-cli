@@ -65,3 +65,17 @@ func TestParseTimeout(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestNameOverride(t *testing.T) {
+	job := createJob([]byte(url + "   nameOverride=foobar"))
+	if job.nameOverride != "foobar" {
+		t.Fail()
+	}
+}
+
+func TestNameOverride_WithEquals(t *testing.T) {
+	job := createJob([]byte(url + "   nameOverride=why="))
+	if job.nameOverride != "why=" {
+		t.Fail()
+	}
+}
