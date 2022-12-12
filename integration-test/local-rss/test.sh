@@ -16,7 +16,13 @@ until $(curl --output /dev/null --silent --head --fail $ENDPOINT); do
   sleep 5
 done
 
+echo "Done waiting for mock rss feed"
+
 echo "$ENDPOINT" | go run feed.go >out.html
+
+echo "Data retrieved"
+cat out.html
+
 tail -n9 out.html >diff1
 tail -n9 integration-test/local-rss/output.html >diff2
 
