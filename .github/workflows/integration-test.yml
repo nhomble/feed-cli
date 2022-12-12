@@ -16,7 +16,7 @@ jobs:
       with:
         tags: feed-cli-test:latest
         push: false
-        context: .
+        context: ./integration-test/local-rss/.
     - uses: addnab/docker-run-action@v3
       with:
         image: feed-cli-test:latest
