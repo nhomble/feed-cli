@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
 
 ENDPOINT="http://localhost:8000/rss.xml"
-
+until $(curl --output /dev/null --silent --head --fail $ENDPOINT); do
+  curl $ENDPOINT
+  sleep 5
+done
 echo "Done waiting for mock rss feed"
 
 echo "$ENDPOINT" | go run feed.go >out.html
