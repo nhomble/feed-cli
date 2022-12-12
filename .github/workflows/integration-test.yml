@@ -12,12 +12,7 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - uses: docker/build-push-action@v3
-      with:
-        tags: feed-cli-test:latest
-        push: false
-        context: ./integration-test/local-rss/.
-    - uses: addnab/docker-run-action@v3
-      with:
-        image: feed-cli-test:latest
-        run: integration-test/local-rss/test.sh
+    - name: Build the test image
+      run: docker build --file ./integration-test/local-rss/Dockerfile --tag feed-cli-test:0.1.0 ./integration-test/local-rss/.
+    - name: Run Test
+      run: sh integration-test/local-rss/test.sh
