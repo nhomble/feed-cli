@@ -10,8 +10,8 @@ clean() {
 docker run -p 8000:8000 --name test -d feed-cli-test:0.1.0
 
 ENDPOINT="http://localhost:8000/rss.xml"
-until $(curl --output /dev/null --silent --head --fail $ENDPOINT); do
-  curl $ENDPOINT
+until "$(curl --output /dev/null --silent --head --fail "$ENDPOINT")"; do
+  curl "$ENDPOINT"
   docker logs test
   sleep 5
 done
@@ -31,7 +31,7 @@ cat out.html
 DIFF=$(diff diff1 diff2)
 if [ "$DIFF" != "" ]; then
   echo "THERE WAS A DIFF!"
-  echo $DIFF
+  echo "$DIFF"
   clean
   exit 1
 else
