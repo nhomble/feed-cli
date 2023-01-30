@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/dghubble/go-twitter v0.0.0-20221104224141-912508c3888b
-	github.com/mmcdole/gofeed v1.1.3
+	github.com/mmcdole/gofeed v1.2.0
 	golang.org/x/oauth2 v0.3.0
 )
 
