@@ -1,4 +1,4 @@
-FROM python:3.11.2
+FROM python:3.11.3
 
 WORKDIR /integration-test
 COPY rss.xml .
