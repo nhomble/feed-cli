@@ -37,6 +37,9 @@ func parserForJob(job Job) FeedParser {
 	if job.isTwitter() {
 		return createTwitterParser()
 	}
+	if job.isYoutube() {
+		return createYoutubeParser()
+	}
 	return defaultParser
 }
 
