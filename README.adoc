@@ -66,10 +66,11 @@ Then the grammar looks like:
 === Feed Schemes
 By default, urls passed as `feedLinks` are interpreted as typical xml feed (rss, atom).
 |===
-| Scheme                | Feature                   | Additional Configuration
+| Scheme                        | Feature                   | Additional Configuration
 
-| (default) http://     | parse rss/atom feed       | none
-| twitter://<handle>    | parse twitter timeline    | define environment variables: TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
+| (default) http://             | parse rss/atom feed       | none
+| twitter://<handle>            | parse twitter timeline    | define environment variables: TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
+| youtube_user://<@username>    | parse youtube channel     |
 |===
 
 
